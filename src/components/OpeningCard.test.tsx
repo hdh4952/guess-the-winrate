@@ -9,6 +9,7 @@ const opening: OpeningEntry = {
   sanMoves: ["e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5"],
   uciMoves: ["e2e4", "e7e5", "g1f3", "b8c6", "f1c4", "f8c5"],
   fen: "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+  counts: { "1600": [60, 20, 20] },
 };
 
 describe("OpeningCard", () => {
@@ -39,6 +40,16 @@ describe("OpeningCard", () => {
     expect(getByLabelText("이전 수")).not.toBeDisabled();
     fireEvent.click(getByLabelText("이전 수"));
     expect(getByText("수 5/6")).toBeInTheDocument();
+  });
+
+  it("jumps to the start position with the reset button", () => {
+    const { getByText, getByLabelText } = render(
+      <OpeningCard opening={opening} perspective="white" revealed={false} onPick={() => {}} />
+    );
+    fireEvent.click(getByLabelText("처음 포지션"));
+    expect(getByText("수 0/6")).toBeInTheDocument();
+    expect(getByLabelText("처음 포지션")).toBeDisabled();
+    expect(getByLabelText("이전 수")).toBeDisabled();
   });
 
   it("shows results (and hides the select button) only when revealed", () => {

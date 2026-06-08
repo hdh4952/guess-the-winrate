@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "build:openings": "tsx scripts/build-openings.ts"
+    "build:openings": "tsx scripts/build-openings.ts",
+    "build:stats": "tsx scripts/build-stats.ts"
   },
   "dependencies": {
     "chess.js": "^1.0.0-beta.8",

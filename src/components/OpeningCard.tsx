@@ -42,6 +42,15 @@ export function OpeningCard({ opening, perspective, revealed, onPick, counts, ou
         <button
           type="button"
           className="step"
+          onClick={() => setPly(0)}
+          disabled={ply === 0}
+          aria-label="처음 포지션"
+        >
+          ⏮
+        </button>
+        <button
+          type="button"
+          className="step"
           onClick={() => setPly((p) => Math.max(0, p - 1))}
           disabled={ply === 0}
           aria-label="이전 수"

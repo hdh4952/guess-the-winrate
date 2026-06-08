@@ -5,7 +5,7 @@ import { RatingPicker } from "./components/RatingPicker";
 import { GameScreen } from "./components/GameScreen";
 import "./styles.css";
 
-const openings = openingsData as OpeningEntry[];
+const openings = openingsData as unknown as OpeningEntry[];
 const BEST_KEY = "gtw-best-streak";
 
 export default function App() {
