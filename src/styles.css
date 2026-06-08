@@ -18,7 +18,7 @@ body {
 
 .app { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
 .title { text-align: center; }
-.screen.center { text-align: center; padding: 3rem; }
+.screen.center, .center { text-align: center; padding: 3rem; }
 
 .rating-grid {
   display: grid;
@@ -52,15 +52,64 @@ body {
   padding: 0.75rem;
   color: var(--fg);
   text-align: center;
-  cursor: pointer;
-  font: inherit;
 }
-.opening-card.clickable:hover { border-color: #888; }
-.opening-card.revealed { cursor: default; }
 .opening-card.correct { border-color: var(--correct); }
 .opening-card.wrong { border-color: var(--wrong); }
 .opening-name { margin: 0.5rem 0 0.25rem; font-size: 1rem; }
 .opening-moves { margin: 0; font-size: 0.85rem; color: #bbb; }
+
+.board-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+.board-controls .step {
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid #555;
+  background: #333;
+  color: var(--fg);
+}
+.board-controls .step:hover:not(:disabled) { background: #444; }
+.board-controls .step:disabled { opacity: 0.35; cursor: default; }
+.ply-counter { font-size: 0.85rem; color: #bbb; min-width: 4.5rem; }
+
+.pick-button {
+  margin-top: 0.75rem;
+  width: 100%;
+  padding: 0.6rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid #4a6;
+  background: #2f4636;
+  color: var(--fg);
+}
+.pick-button:hover:not(:disabled) { background: #3a5a43; border-color: #5b7; }
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.home-button {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: var(--fg);
+}
+.home-button:hover { background: #3a3a3a; }
+.rating-label { font-size: 0.95rem; color: #ddd; }
 
 .chessboard {
   width: 280px;

@@ -1,4 +1,6 @@
+import { useMemo, useState } from "react";
 import type { OpeningEntry, Counts, Perspective } from "../types";
+import { fensForUci } from "../lib/positions";
 import { ChessBoard } from "./ChessBoard";
 import { ResultBars } from "./ResultBars";
 
@@ -23,15 +25,56 @@ function formatMoves(san: string[]): string {
 }
 
 export function OpeningCard({ opening, perspective, revealed, onPick, counts, outcome }: Props) {
-  const className = ["opening-card", revealed ? "revealed" : "clickable", outcome ?? ""]
+  // FEN after every ply (index 0 = start position, last = final position).
+  const fens = useMemo(() => fensForUci(opening.uciMoves), [opening.uciMoves]);
+  const total = opening.uciMoves.length;
+  // Start showing the full (final) position; the arrows scrub backward/forward.
+  const [ply, setPly] = useState(total);
+
+  const className = ["opening-card", revealed ? "revealed" : "", outcome ?? ""]
     .filter(Boolean)
     .join(" ");
+
   return (
-    <button className={className} onClick={onPick} disabled={revealed} type="button">
-      <ChessBoard fen={opening.fen} />
+    <div className={className}>
+      <ChessBoard fen={fens[ply]} />
+      <div className="board-controls">
+        <button
+          type="button"
+          className="step"
+          onClick={() => setPly((p) => Math.max(0, p - 1))}
+          disabled={ply === 0}
+          aria-label="이전 수"
+        >
+          ←
+        </button>
+        <span className="ply-counter">
+          수 {ply}/{total}
+        </span>
+        <button
+          type="button"
+          className="step"
+          onClick={() => setPly((p) => Math.min(total, p + 1))}
+          disabled={ply === total}
+          aria-label="다음 수"
+        >
+          →
+        </button>
+      </div>
       <h3 className="opening-name">{opening.name}</h3>
       <p className="opening-moves">{formatMoves(opening.sanMoves)}</p>
-      {revealed && counts ? <ResultBars counts={counts} perspective={perspective} /> : null}
-    </button>
+      {revealed && counts ? (
+        <ResultBars counts={counts} perspective={perspective} />
+      ) : (
+        <button
+          type="button"
+          className="pick-button"
+          onClick={onPick}
+          disabled={revealed}
+        >
+          이 오프닝 선택
+        </button>
+      )}
+    </div>
   );
 }

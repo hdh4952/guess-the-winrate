@@ -29,6 +29,11 @@ export default function App() {
     }
   };
 
+  const handleHome = () => {
+    setBucket(null);
+    setStreak(0);
+  };
+
   return (
     <main className="app">
       <h1 className="title">Guess the Winrate</h1>
@@ -41,6 +46,7 @@ export default function App() {
           streak={streak}
           best={best}
           onAnswer={handleAnswer}
+          onHome={handleHome}
         />
       )}
     </main>

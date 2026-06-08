@@ -11,3 +11,8 @@ export const RATING_BANDS: RatingBand[] = [
   { label: "2200-2500", bucket: 2200 },
   { label: "2500+", bucket: 2500 },
 ];
+
+/** Display label for a rating bucket, falling back to the number if unknown. */
+export function bandLabel(bucket: number): string {
+  return RATING_BANDS.find((b) => b.bucket === bucket)?.label ?? String(bucket);
+}

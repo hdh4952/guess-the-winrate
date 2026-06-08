@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { OpeningEntry, Round } from "../types";
 import { generateRound } from "../lib/round";
+import { bandLabel } from "../lib/ratings";
 import { isCorrect } from "../lib/winrate";
 import { OpeningCard } from "./OpeningCard";
 import { ScoreBar } from "./ScoreBar";
@@ -11,11 +12,12 @@ interface Props {
   streak: number;
   best: number;
   onAnswer: (correct: boolean) => void;
+  onHome: () => void;
 }
 
 type Status = "loading" | "ready" | "revealed" | "error";
 
-export function GameScreen({ openings, ratingBucket, streak, best, onAnswer }: Props) {
+export function GameScreen({ openings, ratingBucket, streak, best, onAnswer, onHome }: Props) {
   const [status, setStatus] = useState<Status>("loading");
   const [round, setRound] = useState<Round | null>(null);
   const [choice, setChoice] = useState<0 | 1 | null>(null);
@@ -54,12 +56,30 @@ export function GameScreen({ openings, ratingBucket, streak, best, onAnswer }: P
     onAnswer(isCorrect(index, round.countsA, round.countsB, round.perspective));
   };
 
-  if (status === "loading") return <div className="screen center">불러오는 중…</div>;
+  const topBar = (
+    <div className="top-bar">
+      <button type="button" className="home-button" onClick={onHome}>
+        ← 처음으로
+      </button>
+      <span className="rating-label">레이팅 {bandLabel(ratingBucket)}</span>
+    </div>
+  );
+
+  if (status === "loading")
+    return (
+      <div className="screen game">
+        {topBar}
+        <div className="center">불러오는 중…</div>
+      </div>
+    );
   if (status === "error")
     return (
-      <div className="screen center">
-        <p>문제를 불러오지 못했어요.</p>
-        <button type="button" onClick={loadRound}>다시 시도</button>
+      <div className="screen game">
+        {topBar}
+        <div className="center">
+          <p>문제를 불러오지 못했어요.</p>
+          <button type="button" onClick={loadRound}>다시 시도</button>
+        </div>
       </div>
     );
   if (!round) return null;
@@ -74,12 +94,14 @@ export function GameScreen({ openings, ratingBucket, streak, best, onAnswer }: P
 
   return (
     <div className="screen game">
+      {topBar}
       <ScoreBar streak={streak} best={best} />
       <h2 className="question">
         어느 쪽이 <strong>{round.perspective === "white" ? "백" : "흑"}</strong> 승률이 더 높을까요?
       </h2>
       <div className="cards">
         <OpeningCard
+          key={round.a.fen}
           opening={round.a}
           perspective={round.perspective}
           revealed={status === "revealed"}
@@ -88,6 +110,7 @@ export function GameScreen({ openings, ratingBucket, streak, best, onAnswer }: P
           outcome={outcomeFor(0)}
         />
         <OpeningCard
+          key={round.b.fen}
           opening={round.b}
           perspective={round.perspective}
           revealed={status === "revealed"}

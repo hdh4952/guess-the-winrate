@@ -20,25 +20,38 @@ describe("OpeningCard", () => {
     expect(getByText(/1\.\s*e4\s*e5/)).toBeInTheDocument();
   });
 
-  it("calls onPick when clicked and not revealed", () => {
+  it("calls onPick when the select button is clicked", () => {
     const onPick = vi.fn();
-    const { getByRole } = render(
+    const { getByText } = render(
       <OpeningCard opening={opening} perspective="white" revealed={false} onPick={onPick} />
     );
-    fireEvent.click(getByRole("button"));
+    fireEvent.click(getByText("이 오프닝 선택"));
     expect(onPick).toHaveBeenCalledTimes(1);
   });
 
-  it("shows results only when revealed", () => {
+  it("steps through the moves with the arrows", () => {
+    const { getByText, getByLabelText } = render(
+      <OpeningCard opening={opening} perspective="white" revealed={false} onPick={() => {}} />
+    );
+    // starts at the final position (6/6): forward disabled, back enabled
+    expect(getByText("수 6/6")).toBeInTheDocument();
+    expect(getByLabelText("다음 수")).toBeDisabled();
+    expect(getByLabelText("이전 수")).not.toBeDisabled();
+    fireEvent.click(getByLabelText("이전 수"));
+    expect(getByText("수 5/6")).toBeInTheDocument();
+  });
+
+  it("shows results (and hides the select button) only when revealed", () => {
+    const counts = { white: 60, draws: 20, black: 20 };
     const { queryByText, rerender, getByText } = render(
-      <OpeningCard opening={opening} perspective="white" revealed={false} onPick={() => {}}
-        counts={{ white: 60, draws: 20, black: 20 }} />
+      <OpeningCard opening={opening} perspective="white" revealed={false} onPick={() => {}} counts={counts} />
     );
     expect(queryByText(/승률/)).toBeNull();
+    expect(getByText("이 오프닝 선택")).toBeInTheDocument();
     rerender(
-      <OpeningCard opening={opening} perspective="white" revealed={true} onPick={() => {}}
-        counts={{ white: 60, draws: 20, black: 20 }} />
+      <OpeningCard opening={opening} perspective="white" revealed={true} onPick={() => {}} counts={counts} />
     );
     expect(getByText(/승률/)).toBeInTheDocument();
+    expect(queryByText("이 오프닝 선택")).toBeNull();
   });
 });
