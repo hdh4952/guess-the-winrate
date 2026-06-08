@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { OpeningEntry, Round } from "../types";
 import { generateRound } from "../lib/round";
 import { isCorrect } from "../lib/winrate";
@@ -20,15 +20,24 @@ export function GameScreen({ openings, ratingBucket, streak, best, onAnswer }: P
   const [round, setRound] = useState<Round | null>(null);
   const [choice, setChoice] = useState<0 | 1 | null>(null);
 
+  // Identifies the most recent load. A round fetch that resolves after a newer
+  // load started — or after the player has already picked — is stale and must
+  // not clobber the current state (e.g. StrictMode's double-invoked mount effect
+  // firing two in-flight fetches, the slower one landing after a reveal).
+  const requestId = useRef(0);
+
   const loadRound = useCallback(async () => {
+    const id = ++requestId.current;
     setStatus("loading");
     setChoice(null);
     setRound(null);
     try {
       const r = await generateRound(openings, ratingBucket);
+      if (id !== requestId.current) return;
       setRound(r);
       setStatus("ready");
     } catch {
+      if (id !== requestId.current) return;
       setStatus("error");
     }
   }, [openings, ratingBucket]);
@@ -39,6 +48,7 @@ export function GameScreen({ openings, ratingBucket, streak, best, onAnswer }: P
 
   const pick = (index: 0 | 1) => {
     if (status !== "ready" || !round) return;
+    requestId.current++; // invalidate any in-flight load so it can't overwrite the reveal
     setChoice(index);
     setStatus("revealed");
     onAnswer(isCorrect(index, round.countsA, round.countsB, round.perspective));

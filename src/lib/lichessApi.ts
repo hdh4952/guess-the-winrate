@@ -3,7 +3,7 @@ import type { Counts } from "../types";
 const BASE = "https://explorer.lichess.ovh/lichess";
 const cache = new Map<string, Counts>();
 
-type FetchImpl = (input: string) => Promise<Response>;
+type FetchImpl = (input: string, init?: RequestInit) => Promise<Response>;
 
 export async function fetchCounts(
   uciMoves: string[],
@@ -20,7 +20,15 @@ export async function fetchCounts(
     speeds: "blitz,rapid,classical",
     ratings: String(ratingBucket),
   });
-  const res = await fetchImpl(`${BASE}?${params.toString()}`);
+  // The Opening Explorer requires (or rate-limits) anonymous requests on some
+  // networks; send a Bearer token when one is configured. Omitting it still
+  // works where anonymous access is allowed. NOTE: with VITE_ this token ships
+  // in the client bundle — local play only; use a backend proxy for public deploys.
+  const token = import.meta.env.VITE_LICHESS_TOKEN;
+  const init: RequestInit | undefined = token
+    ? { headers: { Authorization: `Bearer ${token}` } }
+    : undefined;
+  const res = await fetchImpl(`${BASE}?${params.toString()}`, init);
   if (!res.ok) {
     throw new Error(`Lichess API error: ${res.status}`);
   }

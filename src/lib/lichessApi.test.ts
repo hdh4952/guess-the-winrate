@@ -33,4 +33,23 @@ describe("fetchCounts", () => {
     const f = mockFetch({}, false, 429);
     await expect(fetchCounts(["e2e4"], 0, f)).rejects.toThrow("429");
   });
+
+  it("sends an Authorization header when VITE_LICHESS_TOKEN is set", async () => {
+    vi.stubEnv("VITE_LICHESS_TOKEN", "test-token");
+    const f = mockFetch({ white: 1, draws: 1, black: 1 });
+    await fetchCounts(["e2e4"], 0, f);
+    const init = f.mock.calls[0][1] as RequestInit;
+    expect((init.headers as Record<string, string>).Authorization).toBe(
+      "Bearer test-token"
+    );
+    vi.unstubAllEnvs();
+  });
+
+  it("omits the Authorization header when no token is set", async () => {
+    vi.stubEnv("VITE_LICHESS_TOKEN", "");
+    const f = mockFetch({ white: 1, draws: 1, black: 1 });
+    await fetchCounts(["e2e4"], 0, f);
+    expect(f.mock.calls[0][1]).toBeUndefined();
+    vi.unstubAllEnvs();
+  });
 });
