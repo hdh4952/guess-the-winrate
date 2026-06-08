@@ -145,8 +145,8 @@ body {
 }
 .compare-row.correct { border-color: var(--correct); }
 .compare-row.wrong { border-color: var(--wrong); }
-.compare-thumb { flex: 0 0 auto; width: 72px; }
-.compare-info { flex: 1; text-align: left; }
+.compare-thumb { flex: 0 0 auto; width: 96px; }
+.compare-info { flex: 1; min-width: 0; text-align: left; }
 .tag { font-size: 0.7rem; padding: 1px 6px; border-radius: 4px; margin-left: 6px; }
 .tag-correct { background: #2f4636; color: #8f8; }
 .tag-wrong { background: #4a2a2a; color: #f99; }

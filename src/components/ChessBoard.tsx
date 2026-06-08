@@ -13,7 +13,7 @@ interface Props {
 export function ChessBoard({ fen, orientation = "white" }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const measured = useElementWidth(ref, 280);
-  const boardWidth = Math.max(120, Math.min(360, measured));
+  const boardWidth = Math.max(48, Math.min(360, measured));
 
   return (
     <div className="chessboard" ref={ref}>
