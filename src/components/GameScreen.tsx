@@ -5,6 +5,9 @@ import { bandLabel } from "../lib/ratings";
 import { isCorrect } from "../lib/winrate";
 import { OpeningCard } from "./OpeningCard";
 import { ScoreBar } from "./ScoreBar";
+import { useMediaQuery } from "../hooks/useMediaQuery";
+import { OpeningCarousel } from "./OpeningCarousel";
+import { ResultComparePanel } from "./ResultComparePanel";
 
 interface Props {
   openings: OpeningEntry[];
@@ -21,6 +24,7 @@ export function GameScreen({ openings, ratingBucket, streak, best, onAnswer, onH
   const [round, setRound] = useState<Round | null>(null);
   const [status, setStatus] = useState<Status>("playing");
   const [choice, setChoice] = useState<0 | 1 | null>(null);
+  const isMobile = useMediaQuery("(max-width: 600px)");
 
   // Rounds are built from precomputed stats — synchronous, no network.
   const newRound = useCallback(() => {
@@ -80,29 +84,52 @@ export function GameScreen({ openings, ratingBucket, streak, best, onAnswer, onH
       <h2 className="question">
         어느 쪽이 <strong>{round.perspective === "white" ? "백" : "흑"}</strong> 승률이 더 높을까요?
       </h2>
-      <div className="cards">
-        <OpeningCard
-          key={round.a.fen}
-          opening={round.a}
-          perspective={round.perspective}
-          revealed={status === "revealed"}
-          onPick={() => pick(0)}
-          counts={round.countsA}
-          outcome={outcomeFor(0)}
-        />
-        <OpeningCard
-          key={round.b.fen}
-          opening={round.b}
-          perspective={round.perspective}
-          revealed={status === "revealed"}
-          onPick={() => pick(1)}
-          counts={round.countsB}
-          outcome={outcomeFor(1)}
-        />
-      </div>
-      {status === "revealed" ? (
-        <button className="next" type="button" onClick={newRound}>다음 문제</button>
-      ) : null}
+      {isMobile ? (
+        status === "revealed" ? (
+          <ResultComparePanel
+            a={round.a}
+            b={round.b}
+            countsA={round.countsA}
+            countsB={round.countsB}
+            perspective={round.perspective}
+            choice={choice}
+            onNext={newRound}
+          />
+        ) : (
+          <OpeningCarousel
+            a={round.a}
+            b={round.b}
+            perspective={round.perspective}
+            onPick={pick}
+          />
+        )
+      ) : (
+        <>
+          <div className="cards">
+            <OpeningCard
+              key={round.a.fen}
+              opening={round.a}
+              perspective={round.perspective}
+              revealed={status === "revealed"}
+              onPick={() => pick(0)}
+              counts={round.countsA}
+              outcome={outcomeFor(0)}
+            />
+            <OpeningCard
+              key={round.b.fen}
+              opening={round.b}
+              perspective={round.perspective}
+              revealed={status === "revealed"}
+              onPick={() => pick(1)}
+              counts={round.countsB}
+              outcome={outcomeFor(1)}
+            />
+          </div>
+          {status === "revealed" ? (
+            <button className="next" type="button" onClick={newRound}>다음 문제</button>
+          ) : null}
+        </>
+      )}
     </div>
   );
 }
