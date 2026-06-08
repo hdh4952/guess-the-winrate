@@ -1,5 +1,7 @@
+import { useRef } from "react";
 import { Chessboard } from "react-chessboard";
 import type { Perspective } from "../types";
+import { useElementWidth } from "../hooks/useElementWidth";
 
 interface Props {
   fen: string;
@@ -7,16 +9,20 @@ interface Props {
   orientation?: Perspective;
 }
 
-/** Static (non-interactive) board diagram for a position, rendered by react-chessboard. */
+/** Static (non-interactive) board diagram; sizes itself to its container. */
 export function ChessBoard({ fen, orientation = "white" }: Props) {
+  const ref = useRef<HTMLDivElement>(null);
+  const measured = useElementWidth(ref, 280);
+  const boardWidth = Math.max(120, Math.min(360, measured));
+
   return (
-    <div className="chessboard">
+    <div className="chessboard" ref={ref}>
       <Chessboard
         id={fen}
         position={fen}
         boardOrientation={orientation}
         arePiecesDraggable={false}
-        boardWidth={280}
+        boardWidth={boardWidth}
         customLightSquareStyle={{ backgroundColor: "#f0d9b5" }}
         customDarkSquareStyle={{ backgroundColor: "#b58863" }}
       />
