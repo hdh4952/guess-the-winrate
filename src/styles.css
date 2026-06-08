@@ -186,9 +186,11 @@ body {
       max(0.75rem, env(safe-area-inset-bottom))
       max(0.75rem, env(safe-area-inset-left));
   }
-  .title { font-size: 1.4rem; }
+  .title { display: none; }
   .question { font-size: 1rem; }
   .top-bar { flex-wrap: wrap; gap: 0.5rem; }
+  .rating-picker { text-align: center; }
+  .rating-grid { grid-template-columns: 1fr; }
   .rating-grid button { padding: 0.6rem; font-size: 0.85rem; }
   .chessboard { width: 100%; max-width: 360px; }
 

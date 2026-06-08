@@ -25,15 +25,19 @@ export function ChessBoard({ fen, orientation = "white", fit = "width" }: Props)
 
   return (
     <div className="chessboard" ref={ref}>
-      <Chessboard
-        id={fen}
-        position={fen}
-        boardOrientation={orientation}
-        arePiecesDraggable={false}
-        boardWidth={boardWidth}
-        customLightSquareStyle={{ backgroundColor: "#f0d9b5" }}
-        customDarkSquareStyle={{ backgroundColor: "#b58863" }}
-      />
+      {/* Inner box is exactly boardWidth and centered, so the board stays
+         centered even when the measured slot is wider than the board. */}
+      <div className="chessboard-board" style={{ width: boardWidth, height: boardWidth, margin: "0 auto" }}>
+        <Chessboard
+          id={fen}
+          position={fen}
+          boardOrientation={orientation}
+          arePiecesDraggable={false}
+          boardWidth={boardWidth}
+          customLightSquareStyle={{ backgroundColor: "#f0d9b5" }}
+          customDarkSquareStyle={{ backgroundColor: "#b58863" }}
+        />
+      </div>
     </div>
   );
 }
