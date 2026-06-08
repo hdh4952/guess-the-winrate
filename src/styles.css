@@ -63,25 +63,10 @@ body {
 .opening-moves { margin: 0; font-size: 0.85rem; color: #bbb; }
 
 .chessboard {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  width: 100%;
-  max-width: 280px;
+  width: 280px;
+  max-width: 100%;
   margin: 0 auto;
-  aspect-ratio: 1 / 1;
-  border: 1px solid #000;
 }
-.square {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: clamp(14px, 4.2vw, 26px);
-  line-height: 1;
-}
-.square.light { background: var(--light); }
-.square.dark { background: var(--dark); }
-.white-piece { color: #fff; text-shadow: 0 0 2px #000; }
-.black-piece { color: #000; }
 
 .result-bars { margin-top: 0.75rem; }
 .bar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; }
