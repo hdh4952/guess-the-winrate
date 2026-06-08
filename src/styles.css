@@ -1,0 +1,95 @@
+:root {
+  --light: #f0d9b5;
+  --dark: #b58863;
+  --bg: #1a1a1a;
+  --fg: #f5f5f5;
+  --correct: #4caf50;
+  --wrong: #e53935;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, sans-serif;
+}
+
+.app { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+.title { text-align: center; }
+.screen.center { text-align: center; padding: 3rem; }
+
+.rating-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+.rating-grid button {
+  padding: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #2a2a2a;
+  color: var(--fg);
+}
+.rating-grid button:hover { background: #3a3a3a; }
+
+.score-bar { display: flex; justify-content: space-between; margin-bottom: 1rem; }
+.question { text-align: center; }
+
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.opening-card {
+  background: #2a2a2a;
+  border: 2px solid #444;
+  border-radius: 10px;
+  padding: 0.75rem;
+  color: var(--fg);
+  text-align: center;
+  cursor: pointer;
+  font: inherit;
+}
+.opening-card.clickable:hover { border-color: #888; }
+.opening-card.revealed { cursor: default; }
+.opening-card.correct { border-color: var(--correct); }
+.opening-card.wrong { border-color: var(--wrong); }
+.opening-name { margin: 0.5rem 0 0.25rem; font-size: 1rem; }
+.opening-moves { margin: 0; font-size: 0.85rem; color: #bbb; }
+
+.chessboard {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+  aspect-ratio: 1 / 1;
+  border: 1px solid #000;
+}
+.square {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(14px, 4.2vw, 26px);
+  line-height: 1;
+}
+.square.light { background: var(--light); }
+.square.dark { background: var(--dark); }
+.white-piece { color: #fff; text-shadow: 0 0 2px #000; }
+.black-piece { color: #000; }
+
+.result-bars { margin-top: 0.75rem; }
+.bar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; }
+.seg.white { background: #eee; }
+.seg.draw { background: #999; }
+.seg.black { background: #333; }
+.bar-legend { display: flex; justify-content: space-between; font-size: 0.7rem; color: #bbb; margin-top: 2px; }
+.rate { margin-top: 0.4rem; font-size: 0.9rem; }
+.sample { color: #aaa; }
+
+.next { display: block; margin: 1.5rem auto 0; padding: 0.75rem 2rem; font-size: 1rem; cursor: pointer; border-radius: 8px; border: none; background: #4a6; color: #fff; }
