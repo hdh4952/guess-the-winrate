@@ -1,5 +1,6 @@
-# 오프닝 승률 맞추기 게임 — 설계 문서
+# Guess the Winrate — 설계 문서
 
+프로젝트명: **Guess the Winrate**
 작성일: 2026-06-08
 
 ## 1. 개요
