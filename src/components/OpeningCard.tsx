@@ -37,7 +37,7 @@ export function OpeningCard({ opening, perspective, revealed, onPick, counts, ou
 
   return (
     <div className={className}>
-      <ChessBoard fen={fens[ply]} />
+      <ChessBoard fen={fens[ply]} orientation={perspective} />
       <div className="board-controls">
         <button
           type="button"
