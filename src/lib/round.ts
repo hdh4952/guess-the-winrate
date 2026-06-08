@@ -1,6 +1,6 @@
 import type { OpeningEntry, Counts, Perspective, Round } from "../types";
 import { fetchCounts as defaultFetchCounts } from "./lichessApi";
-import { totalGames } from "./winrate";
+import { totalGames, higherWinRateIndex } from "./winrate";
 
 export function pickTwoDistinct(
   openings: OpeningEntry[],
@@ -40,6 +40,7 @@ export async function generateRound(
       fetchCounts(b.uciMoves, ratingBucket),
     ]);
     if (totalGames(countsA) < minGames || totalGames(countsB) < minGames) continue;
+    if (higherWinRateIndex(countsA, countsB, perspective) === null) continue;
     return { a, b, countsA, countsB, perspective };
   }
   throw new Error("Could not generate a valid round");

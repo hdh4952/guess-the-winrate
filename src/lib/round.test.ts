@@ -48,10 +48,11 @@ describe("generateRound", () => {
     const calls: string[][] = [];
     const fc = vi.fn(async (uci: string[]): Promise<Counts> => {
       calls.push(uci);
-      // First attempt's openings are tiny; later attempts are large.
-      return calls.length <= 2
-        ? { white: 1, draws: 1, black: 1 }
-        : { white: 5000, draws: 1000, black: 2000 };
+      // First attempt's openings are tiny; later attempts are large and NOT tied.
+      if (calls.length <= 2) return { white: 1, draws: 1, black: 1 };
+      return uci[0] === "A"
+        ? { white: 5000, draws: 1000, black: 2000 }
+        : { white: 3000, draws: 1000, black: 4000 };
     });
     const round = await generateRound(openings, 0, {
       rng: seq([0, 0, 0.1]),
