@@ -9,14 +9,22 @@
 
 * { box-sizing: border-box; }
 
+html, body { height: 100%; }
+
 body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
   font-family: system-ui, sans-serif;
+  /* App-shell: lock the page so mobile browser chrome doesn't show/hide on
+     scroll (no URL-bar jump, no rubber-band bounce). */
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
-.app { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+/* The app fills the dynamic viewport (dvh accounts for mobile toolbars) and
+   scrolls internally only if its content is taller than the screen. */
+.app { max-width: 900px; margin: 0 auto; padding: 1.5rem; height: 100dvh; overflow-y: auto; }
 .title { text-align: center; }
 .screen.center, .center { text-align: center; padding: 3rem; }
 
@@ -130,12 +138,13 @@ body {
 
 /* --- Mobile carousel (play) --- */
 .carousel { touch-action: pan-y; }
-.dots { display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.75rem; }
-.dot {
-  width: 12px; height: 12px; padding: 0; border: none; border-radius: 50%;
-  background: #555; cursor: pointer;
+.switcher { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
+.switcher .switch-btn {
+  flex: 1; padding: 0.6rem; font-size: 1rem; font-weight: 600; line-height: 1;
+  cursor: pointer; border-radius: 8px; border: 1px solid #444;
+  background: #2a2a2a; color: var(--fg);
 }
-.dot.active { background: #ccc; }
+.switcher .switch-btn.active { background: #3a5a43; border-color: #5b7; color: #fff; }
 
 /* --- Mobile compare panel (reveal) --- */
 .compare-panel { display: flex; flex-direction: column; gap: 0.75rem; }
@@ -153,7 +162,14 @@ body {
 
 /* --- Phone breakpoint --- */
 @media (max-width: 600px) {
-  .app { padding: 0.75rem; }
+  /* Honor notch / rounded-corner safe areas (needs viewport-fit=cover). */
+  .app {
+    padding:
+      max(0.75rem, env(safe-area-inset-top))
+      max(0.75rem, env(safe-area-inset-right))
+      max(0.75rem, env(safe-area-inset-bottom))
+      max(0.75rem, env(safe-area-inset-left));
+  }
   .title { font-size: 1.4rem; }
   .question { font-size: 1rem; }
   .top-bar { flex-wrap: wrap; gap: 0.5rem; }

@@ -18,7 +18,15 @@ describe("OpeningCarousel", () => {
     expect(queryByText("Sicilian Defense")).toBeNull();
   });
 
-  it("switches to the second opening when the second dot is tapped", () => {
+  it("renders 1/2 switch buttons", () => {
+    const { getByRole } = render(
+      <OpeningCarousel a={A} b={B} perspective="white" onPick={() => {}} />
+    );
+    expect(getByRole("tab", { name: "오프닝 1/2" })).toHaveTextContent("1");
+    expect(getByRole("tab", { name: "오프닝 2/2" })).toHaveTextContent("2");
+  });
+
+  it("switches to the second opening when the second tab is tapped", () => {
     const { getByLabelText, getByText, queryByText } = render(
       <OpeningCarousel a={A} b={B} perspective="white" onPick={() => {}} />
     );

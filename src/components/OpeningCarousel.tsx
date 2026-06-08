@@ -11,7 +11,7 @@ interface Props {
 
 const SWIPE_THRESHOLD = 40;
 
-/** Mobile play view: one opening at a time, switched by swipe or dots. */
+/** Mobile play view: one opening at a time, switched by swipe or the 1/2 buttons. */
 export function OpeningCarousel({ a, b, perspective, onPick }: Props) {
   const [active, setActive] = useState<0 | 1>(0);
   const startX = useRef(0);
@@ -29,6 +29,21 @@ export function OpeningCarousel({ a, b, perspective, onPick }: Props) {
 
   return (
     <div className="carousel" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+      <div className="switcher" role="tablist">
+        {[0, 1].map((i) => (
+          <button
+            key={i}
+            type="button"
+            role="tab"
+            aria-label={`오프닝 ${i + 1}/2`}
+            aria-selected={active === i}
+            className={"switch-btn" + (active === i ? " active" : "")}
+            onClick={() => setActive(i as 0 | 1)}
+          >
+            {i + 1}
+          </button>
+        ))}
+      </div>
       {/* key on fen remounts OpeningCard on switch, resetting its move-stepper to the final position. */}
       <OpeningCard
         key={openings[active].fen}
@@ -37,19 +52,6 @@ export function OpeningCarousel({ a, b, perspective, onPick }: Props) {
         revealed={false}
         onPick={() => onPick(active)}
       />
-      <div className="dots" role="tablist">
-        {[0, 1].map((i) => (
-          <button
-            key={i}
-            type="button"
-            role="tab"
-            aria-label={`오프닝 ${i + 1}/2`}
-            aria-selected={active === i}
-            className={"dot" + (active === i ? " active" : "")}
-            onClick={() => setActive(i as 0 | 1)}
-          />
-        ))}
-      </div>
     </div>
   );
 }
