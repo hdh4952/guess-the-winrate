@@ -13,6 +13,7 @@ interface Props {
 export function ChessBoard({ fen, orientation = "white" }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const measured = useElementWidth(ref, 280);
+  // Floor 48 lets the small compare-panel thumbnail (~96px) render without overflow; cap 360 for phones.
   const boardWidth = Math.max(48, Math.min(360, measured));
 
   return (

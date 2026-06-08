@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { render } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import { GameScreen } from "./GameScreen";
 import type { OpeningEntry } from "../types";
 
@@ -46,5 +46,15 @@ describe("GameScreen layout", () => {
     expect(container.querySelector(".carousel")).not.toBeNull();
     expect(container.querySelectorAll(".opening-card")).toHaveLength(1);
     expect(getAllByRole("tab")).toHaveLength(2);
+  });
+
+  it("shows the compare panel after picking on mobile", () => {
+    setMobile(true);
+    const { container, getByText } = render(<GameScreen {...props} />);
+    // pick the currently shown opening in the carousel
+    fireEvent.click(getByText("이 오프닝 선택"));
+    expect(container.querySelector(".compare-panel")).not.toBeNull();
+    expect(container.querySelectorAll(".compare-row")).toHaveLength(2);
+    expect(getByText("다음 문제")).toBeInTheDocument();
   });
 });

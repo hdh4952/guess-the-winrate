@@ -23,11 +23,13 @@ export function OpeningCarousel({ a, b, perspective, onPick }: Props) {
   const onTouchEnd = (e: React.TouchEvent) => {
     const dx = e.changedTouches[0].clientX - startX.current;
     if (Math.abs(dx) < SWIPE_THRESHOLD) return;
+    // Two slides only: swipe left -> second opening, right -> first (absolute, not toggle).
     setActive(dx < 0 ? 1 : 0);
   };
 
   return (
     <div className="carousel" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+      {/* key on fen remounts OpeningCard on switch, resetting its move-stepper to the final position. */}
       <OpeningCard
         key={openings[active].fen}
         opening={openings[active]}

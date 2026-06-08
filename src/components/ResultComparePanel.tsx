@@ -36,8 +36,10 @@ export function ResultComparePanel({
               <h3 className="opening-name">
                 {o.name}
                 {i === correct ? <span className="tag tag-correct">정답</span> : null}
-                {i === choice && i !== correct ? (
-                  <span className="tag tag-wrong">내 선택</span>
+                {i === choice ? (
+                  <span className={"tag " + (i === correct ? "tag-correct" : "tag-wrong")}>
+                    내 선택
+                  </span>
                 ) : null}
               </h3>
               <ResultBars counts={counts} perspective={perspective} />

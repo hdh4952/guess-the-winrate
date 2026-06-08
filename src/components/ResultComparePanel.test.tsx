@@ -38,6 +38,16 @@ describe("ResultComparePanel", () => {
     expect(getByText("내 선택")).toBeInTheDocument();
   });
 
+  it("marks the player's pick even when it is correct", () => {
+    // A has the higher white win rate; choosing A (0) is correct.
+    const { getByText, getAllByText } = render(
+      <ResultComparePanel a={A} b={B} countsA={countsA} countsB={countsB}
+        perspective="white" choice={0} onNext={() => {}} />
+    );
+    expect(getAllByText("정답")).toHaveLength(1);
+    expect(getByText("내 선택")).toBeInTheDocument();
+  });
+
   it("calls onNext when 다음 문제 is clicked", () => {
     const onNext = vi.fn();
     const { getByText } = render(
