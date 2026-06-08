@@ -1,20 +1,27 @@
 import { useRef } from "react";
 import { Chessboard } from "react-chessboard";
 import type { Perspective } from "../types";
-import { useElementWidth } from "../hooks/useElementWidth";
+import { useElementSize } from "../hooks/useElementSize";
 
 interface Props {
   fen: string;
   /** Side shown at the bottom of the board. Defaults to white. */
   orientation?: Perspective;
+  /**
+   * "width" (default): board fills the container width.
+   * "contain": board fits inside the container box (min of width/height),
+   * so a height-constrained slot keeps the whole screen scroll-free.
+   */
+  fit?: "width" | "contain";
 }
 
 /** Static (non-interactive) board diagram; sizes itself to its container. */
-export function ChessBoard({ fen, orientation = "white" }: Props) {
+export function ChessBoard({ fen, orientation = "white", fit = "width" }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const measured = useElementWidth(ref, 280);
+  const { width, height } = useElementSize(ref, { width: 280, height: 280 });
+  const basis = fit === "contain" ? Math.min(width, height) : width;
   // Floor 48 lets the small compare-panel thumbnail (~96px) render without overflow; cap 360 for phones.
-  const boardWidth = Math.max(48, Math.min(360, measured));
+  const boardWidth = Math.max(48, Math.min(360, basis));
 
   return (
     <div className="chessboard" ref={ref}>

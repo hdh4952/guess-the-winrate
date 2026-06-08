@@ -11,6 +11,9 @@ interface Props {
   onPick: () => void;
   counts?: Counts;
   outcome?: "correct" | "wrong";
+  /** When true, the card fills its parent's height and the board shrinks to
+   * the leftover space so the whole screen stays scroll-free (mobile play). */
+  fillHeight?: boolean;
 }
 
 function formatMoves(san: string[]): string {
@@ -24,20 +27,22 @@ function formatMoves(san: string[]): string {
   return parts.join("  ");
 }
 
-export function OpeningCard({ opening, perspective, revealed, onPick, counts, outcome }: Props) {
+export function OpeningCard({ opening, perspective, revealed, onPick, counts, outcome, fillHeight }: Props) {
   // FEN after every ply (index 0 = start position, last = final position).
   const fens = useMemo(() => fensForUci(opening.uciMoves), [opening.uciMoves]);
   const total = opening.uciMoves.length;
   // Start showing the full (final) position; the arrows scrub backward/forward.
   const [ply, setPly] = useState(total);
 
-  const className = ["opening-card", revealed ? "revealed" : "", outcome ?? ""]
+  const className = ["opening-card", fillHeight ? "opening-card-fill" : "", revealed ? "revealed" : "", outcome ?? ""]
     .filter(Boolean)
     .join(" ");
 
   return (
     <div className={className}>
-      <ChessBoard fen={fens[ply]} orientation={perspective} />
+      <div className="card-board">
+        <ChessBoard fen={fens[ply]} orientation={perspective} fit={fillHeight ? "contain" : "width"} />
+      </div>
       <div className="board-controls">
         <button
           type="button"

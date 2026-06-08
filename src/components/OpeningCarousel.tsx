@@ -51,6 +51,7 @@ export function OpeningCarousel({ a, b, perspective, onPick }: Props) {
         perspective={perspective}
         revealed={false}
         onPick={() => onPick(active)}
+        fillHeight
       />
     </div>
   );
