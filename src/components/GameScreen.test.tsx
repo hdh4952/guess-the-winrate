@@ -2,6 +2,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 import { GameScreen } from "./GameScreen";
 import type { OpeningEntry } from "../types";
+import { LanguageProvider } from "../i18n/LanguageContext";
 
 function op(name: string, fen: string, counts: OpeningEntry["counts"]): OpeningEntry {
   return { eco: "X", name, sanMoves: ["e4", "e5"], uciMoves: ["e2e4", "e7e5"], fen, counts };
@@ -56,5 +57,16 @@ describe("GameScreen layout", () => {
     expect(container.querySelector(".compare-panel")).not.toBeNull();
     expect(container.querySelectorAll(".compare-row")).toHaveLength(2);
     expect(getByText("다음 문제")).toBeInTheDocument();
+  });
+
+  it("renders the English question and Next button under an en provider", () => {
+    const { getByText } = render(
+      <LanguageProvider initialLang="en">
+        <GameScreen {...props} />
+      </LanguageProvider>,
+    );
+    expect(getByText(/win rate\?/)).toBeInTheDocument();
+    fireEvent.click(getByText("Pick this opening"));
+    expect(getByText("Next")).toBeInTheDocument();
   });
 });

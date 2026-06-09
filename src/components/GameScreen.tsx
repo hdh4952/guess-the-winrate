@@ -8,6 +8,7 @@ import { ScoreBar } from "./ScoreBar";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { OpeningCarousel } from "./OpeningCarousel";
 import { ResultComparePanel } from "./ResultComparePanel";
+import { useT } from "../i18n/useT";
 
 interface Props {
   openings: OpeningEntry[];
@@ -21,6 +22,7 @@ interface Props {
 type Status = "playing" | "revealed" | "empty";
 
 export function GameScreen({ openings, ratingBucket, streak, best, onAnswer, onHome }: Props) {
+  const t = useT();
   const [round, setRound] = useState<Round | null>(null);
   const [status, setStatus] = useState<Status>("playing");
   const [choice, setChoice] = useState<0 | 1 | null>(null);
@@ -52,9 +54,9 @@ export function GameScreen({ openings, ratingBucket, streak, best, onAnswer, onH
   const topBar = (
     <div className="top-bar">
       <button type="button" className="home-button" onClick={onHome}>
-        ← 처음으로
+        {t.home}
       </button>
-      <span className="rating-label">레이팅 {bandLabel(ratingBucket)}</span>
+      <span className="rating-label">{t.ratingLabel(bandLabel(ratingBucket))}</span>
     </div>
   );
 
@@ -63,8 +65,8 @@ export function GameScreen({ openings, ratingBucket, streak, best, onAnswer, onH
       <div className="screen game">
         {topBar}
         <div className="center">
-          <p>이 레이팅 구간은 데이터가 부족해요.</p>
-          <button type="button" onClick={onHome}>다른 구간 선택</button>
+          <p>{t.emptyBucket}</p>
+          <button type="button" onClick={onHome}>{t.pickAnotherRange}</button>
         </div>
       </div>
     );
@@ -82,7 +84,9 @@ export function GameScreen({ openings, ratingBucket, streak, best, onAnswer, onH
       {topBar}
       <ScoreBar streak={streak} best={best} />
       <h2 className="question">
-        어느 쪽이 <strong>{round.perspective === "white" ? "백" : "흑"}</strong> 승률이 더 높을까요?
+        {t.questionBefore}
+        <strong>{round.perspective === "white" ? t.white : t.black}</strong>
+        {t.questionAfter}
       </h2>
       {isMobile ? (
         status === "revealed" ? (
@@ -126,7 +130,7 @@ export function GameScreen({ openings, ratingBucket, streak, best, onAnswer, onH
             />
           </div>
           {status === "revealed" ? (
-            <button className="next" type="button" onClick={newRound}>다음 문제</button>
+            <button className="next" type="button" onClick={newRound}>{t.next}</button>
           ) : null}
         </>
       )}
