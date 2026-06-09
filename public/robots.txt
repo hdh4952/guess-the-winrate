@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hdh4952.github.io/guess-the-winrate/sitemap.xml
