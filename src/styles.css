@@ -313,3 +313,17 @@ body {
   background: #2f4636;
   color: #9dc;
 }
+
+.attribution {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.8rem;
+}
+.attribution a {
+  color: #888;
+  text-decoration: none;
+}
+.attribution a:hover {
+  color: #bbb;
+  text-decoration: underline;
+}

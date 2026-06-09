@@ -7,11 +7,13 @@ import "./styles.css";
 import { LanguageToggle } from "./components/LanguageToggle";
 import { UpdateToast } from "./components/UpdateToast";
 import { useServiceWorkerUpdate } from "./pwa/useServiceWorkerUpdate";
+import { useT } from "./i18n/useT";
 
 const openings = openingsData as unknown as OpeningEntry[];
 const BEST_KEY = "gtw-best-streak";
 
 export default function App() {
+  const t = useT();
   const { needRefresh, refresh } = useServiceWorkerUpdate();
   const [bucket, setBucket] = useState<number | null>(null);
   const [streak, setStreak] = useState(0);
@@ -43,7 +45,14 @@ export default function App() {
       <LanguageToggle />
       <h1 className="title">Guess the Winrate</h1>
       {bucket === null ? (
-        <RatingPicker onSelect={setBucket} />
+        <>
+          <RatingPicker onSelect={setBucket} />
+          <footer className="attribution">
+            <a href="https://lichess.org" target="_blank" rel="noopener noreferrer">
+              {t.poweredBy}
+            </a>
+          </footer>
+        </>
       ) : (
         <GameScreen
           openings={openings}

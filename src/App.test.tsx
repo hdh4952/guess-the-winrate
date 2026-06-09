@@ -16,6 +16,12 @@ describe("App", () => {
     expect(container.querySelectorAll(".rating-grid button")).toHaveLength(9);
   });
 
+  it("shows a Lichess attribution link on the home screen", () => {
+    const { getByRole } = render(<App />);
+    const link = getByRole("link", { name: /Lichess/ });
+    expect(link).toHaveAttribute("href", "https://lichess.org");
+  });
+
   it("renders English copy and a language toggle under an en provider", () => {
     const { getByText, getByRole } = render(
       <LanguageProvider initialLang="en">

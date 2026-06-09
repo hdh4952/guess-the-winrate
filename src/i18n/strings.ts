@@ -42,6 +42,8 @@ const ko = {
   iosInstallStep1: "하단 공유 버튼을 누르세요",
   iosInstallStep2: "'홈 화면에 추가'를 선택하세요",
   close: "닫기",
+  // Attribution
+  poweredBy: "데이터 제공: Lichess",
 };
 
 export type Strings = typeof ko;
@@ -77,6 +79,7 @@ const en: Strings = {
   iosInstallStep1: "Tap the Share button below",
   iosInstallStep2: "Choose 'Add to Home Screen'",
   close: "Close",
+  poweredBy: "Powered by Lichess",
 };
 
 export const strings: Record<Lang, Strings> = { ko, en };
