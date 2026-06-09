@@ -188,7 +188,9 @@ body {
   }
   .title { display: none; }
   .question { font-size: 1rem; }
-  .top-bar { flex-wrap: wrap; gap: 0.5rem; }
+  /* Reserve room on the right so the fixed language toggle never overlaps the
+     rating label. */
+  .top-bar { flex-wrap: wrap; gap: 0.5rem; padding-right: 4.5rem; }
   .rating-picker { text-align: center; }
   .rating-grid { grid-template-columns: 1fr; }
   .rating-grid button { padding: 0.6rem; font-size: 0.85rem; }
