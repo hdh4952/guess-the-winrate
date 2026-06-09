@@ -33,6 +33,9 @@ const ko = {
   // ResultComparePanel
   correct: "정답",
   myPick: "내 선택",
+  // UpdateToast (PWA)
+  updateAvailable: "새 버전이 있어요",
+  refresh: "새로고침",
 };
 
 export type Strings = typeof ko;
@@ -61,6 +64,8 @@ const en: Strings = {
   games: (n: number) => `(${n.toLocaleString()} games)`,
   correct: "Correct",
   myPick: "My pick",
+  updateAvailable: "A new version is available",
+  refresh: "Refresh",
 };
 
 export const strings: Record<Lang, Strings> = { ko, en };
