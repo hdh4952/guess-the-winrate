@@ -60,13 +60,13 @@ describe("GameScreen layout", () => {
   });
 
   it("renders the English question and Next button under an en provider", () => {
-    const { getByText } = render(
+    const { getByText, getAllByText } = render(
       <LanguageProvider initialLang="en">
         <GameScreen {...props} />
       </LanguageProvider>,
     );
     expect(getByText(/win rate\?/)).toBeInTheDocument();
-    fireEvent.click(getByText("Pick this opening"));
+    fireEvent.click(getAllByText("Pick this opening")[0]);
     expect(getByText("Next")).toBeInTheDocument();
   });
 });
