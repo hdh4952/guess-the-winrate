@@ -256,3 +256,45 @@ body {
 .update-toast button:hover {
   background: #3a5a43;
 }
+
+.install-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 300;
+}
+.install-modal {
+  max-width: 320px;
+  margin: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+.install-modal h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+.install-modal ol {
+  margin: 0 0 1rem;
+  padding-left: 1.25rem;
+  line-height: 1.6;
+}
+.install-modal button {
+  display: block;
+  margin-left: auto;
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  background: #4a6;
+  color: #fff;
+  cursor: pointer;
+}
+.install-modal button:hover {
+  background: #3a5a43;
+}
