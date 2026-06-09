@@ -201,3 +201,26 @@ body {
   .carousel { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
   .carousel .opening-card { flex: 1 1 auto; min-height: 0; }
 }
+
+.lang-toggle {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 2px;
+  z-index: 100;
+}
+.lang-btn {
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #555;
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.lang-btn.active {
+  color: #fff;
+  border-color: #fff;
+}
