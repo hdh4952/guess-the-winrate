@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 import { OpeningCard } from "./OpeningCard";
 import type { OpeningEntry } from "../types";
+import { LanguageProvider } from "../i18n/LanguageContext";
 
 const opening: OpeningEntry = {
   eco: "C50",
@@ -50,6 +51,16 @@ describe("OpeningCard", () => {
     expect(getByText("수 0/6")).toBeInTheDocument();
     expect(getByLabelText("처음 포지션")).toBeDisabled();
     expect(getByLabelText("이전 수")).toBeDisabled();
+  });
+
+  it("renders English ply counter and pick button under an en provider", () => {
+    const { getByText } = render(
+      <LanguageProvider initialLang="en">
+        <OpeningCard opening={opening} perspective="white" revealed={false} onPick={() => {}} />
+      </LanguageProvider>,
+    );
+    expect(getByText(/^Move \d+\/\d+$/)).toBeInTheDocument();
+    expect(getByText("Pick this opening")).toBeInTheDocument();
   });
 
   it("shows results (and hides the select button) only when revealed", () => {

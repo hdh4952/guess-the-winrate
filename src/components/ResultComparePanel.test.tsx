@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 import { ResultComparePanel } from "./ResultComparePanel";
 import type { OpeningEntry } from "../types";
+import { LanguageProvider } from "../i18n/LanguageContext";
 
 function op(name: string, fen: string): OpeningEntry {
   return { eco: "X", name, sanMoves: ["e4"], uciMoves: ["e2e4"], fen, counts: {} };
@@ -56,5 +57,17 @@ describe("ResultComparePanel", () => {
     );
     fireEvent.click(getByText("다음 문제"));
     expect(onNext).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders English tags and Next button under an en provider", () => {
+    const { getByText, getAllByText } = render(
+      <LanguageProvider initialLang="en">
+        <ResultComparePanel a={A} b={B} countsA={countsA} countsB={countsB}
+          perspective="white" choice={0} onNext={() => {}} />
+      </LanguageProvider>,
+    );
+    expect(getAllByText("Correct")).toHaveLength(1);
+    expect(getByText("My pick")).toBeInTheDocument();
+    expect(getByText("Next")).toBeInTheDocument();
   });
 });

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import type { OpeningEntry, Perspective } from "../types";
 import { OpeningCard } from "./OpeningCard";
+import { useT } from "../i18n/useT";
 
 interface Props {
   a: OpeningEntry;
@@ -13,6 +14,7 @@ const SWIPE_THRESHOLD = 40;
 
 /** Mobile play view: one opening at a time, switched by swipe or the 1/2 buttons. */
 export function OpeningCarousel({ a, b, perspective, onPick }: Props) {
+  const t = useT();
   const [active, setActive] = useState<0 | 1>(0);
   const startX = useRef(0);
   const openings = [a, b] as const;
@@ -35,7 +37,7 @@ export function OpeningCarousel({ a, b, perspective, onPick }: Props) {
             key={i}
             type="button"
             role="tab"
-            aria-label={`오프닝 ${i + 1}/2`}
+            aria-label={t.openingAria(i + 1)}
             aria-selected={active === i}
             className={"switch-btn" + (active === i ? " active" : "")}
             onClick={() => setActive(i as 0 | 1)}

@@ -2,6 +2,7 @@ import type { OpeningEntry, Counts, Perspective } from "../types";
 import { ChessBoard } from "./ChessBoard";
 import { ResultBars } from "./ResultBars";
 import { higherWinRateIndex } from "../lib/winrate";
+import { useT } from "../i18n/useT";
 
 interface Props {
   a: OpeningEntry;
@@ -17,6 +18,7 @@ interface Props {
 export function ResultComparePanel({
   a, b, countsA, countsB, perspective, choice, onNext,
 }: Props) {
+  const t = useT();
   const correct = higherWinRateIndex(countsA, countsB, perspective);
   const rows = [
     { o: a, counts: countsA, i: 0 as const },
@@ -35,10 +37,10 @@ export function ResultComparePanel({
             <div className="compare-info">
               <h3 className="opening-name">
                 {o.name}
-                {i === correct ? <span className="tag tag-correct">정답</span> : null}
+                {i === correct ? <span className="tag tag-correct">{t.correct}</span> : null}
                 {i === choice ? (
                   <span className={"tag " + (i === correct ? "tag-correct" : "tag-wrong")}>
-                    내 선택
+                    {t.myPick}
                   </span>
                 ) : null}
               </h3>
@@ -48,7 +50,7 @@ export function ResultComparePanel({
         );
       })}
       <button className="next" type="button" onClick={onNext}>
-        다음 문제
+        {t.next}
       </button>
     </div>
   );

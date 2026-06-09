@@ -1,13 +1,16 @@
+import { useT } from "../i18n/useT";
+
 interface Props {
   streak: number;
   best: number;
 }
 
 export function ScoreBar({ streak, best }: Props) {
+  const t = useT();
   return (
     <div className="score-bar">
-      <span>현재 연속: <strong>{streak}</strong></span>
-      <span>최고 기록: <strong>{best}</strong></span>
+      <span>{t.streak}: <strong>{streak}</strong></span>
+      <span>{t.best}: <strong>{best}</strong></span>
     </div>
   );
 }

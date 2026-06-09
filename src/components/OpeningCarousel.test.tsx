@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 import { OpeningCarousel } from "./OpeningCarousel";
 import type { OpeningEntry } from "../types";
+import { LanguageProvider } from "../i18n/LanguageContext";
 
 function op(name: string, fen: string): OpeningEntry {
   return { eco: "X", name, sanMoves: ["e4"], uciMoves: ["e2e4"], fen, counts: {} };
@@ -53,6 +54,16 @@ describe("OpeningCarousel", () => {
     fireEvent.touchStart(carousel, { changedTouches: [{ clientX: 200 }] });
     fireEvent.touchEnd(carousel, { changedTouches: [{ clientX: 180 }] });
     expect(getByText("Italian Game")).toBeInTheDocument();
+  });
+
+  it("uses English tab aria-labels under an en provider", () => {
+    const { getByRole } = render(
+      <LanguageProvider initialLang="en">
+        <OpeningCarousel a={A} b={B} perspective="white" onPick={() => {}} />
+      </LanguageProvider>,
+    );
+    expect(getByRole("tab", { name: "Opening 1/2" })).toBeInTheDocument();
+    expect(getByRole("tab", { name: "Opening 2/2" })).toBeInTheDocument();
   });
 
   it("calls onPick with the active index", () => {

@@ -3,6 +3,7 @@ import type { OpeningEntry, Counts, Perspective } from "../types";
 import { fensForUci } from "../lib/positions";
 import { ChessBoard } from "./ChessBoard";
 import { ResultBars } from "./ResultBars";
+import { useT } from "../i18n/useT";
 
 interface Props {
   opening: OpeningEntry;
@@ -28,6 +29,7 @@ function formatMoves(san: string[]): string {
 }
 
 export function OpeningCard({ opening, perspective, revealed, onPick, counts, outcome, fillHeight }: Props) {
+  const t = useT();
   // FEN after every ply (index 0 = start position, last = final position).
   const fens = useMemo(() => fensForUci(opening.uciMoves), [opening.uciMoves]);
   const total = opening.uciMoves.length;
@@ -49,7 +51,7 @@ export function OpeningCard({ opening, perspective, revealed, onPick, counts, ou
           className="step"
           onClick={() => setPly(0)}
           disabled={ply === 0}
-          aria-label="처음 포지션"
+          aria-label={t.firstPosition}
         >
           ⏮
         </button>
@@ -58,19 +60,19 @@ export function OpeningCard({ opening, perspective, revealed, onPick, counts, ou
           className="step"
           onClick={() => setPly((p) => Math.max(0, p - 1))}
           disabled={ply === 0}
-          aria-label="이전 수"
+          aria-label={t.prevMove}
         >
           ←
         </button>
         <span className="ply-counter">
-          수 {ply}/{total}
+          {t.ply(ply, total)}
         </span>
         <button
           type="button"
           className="step"
           onClick={() => setPly((p) => Math.min(total, p + 1))}
           disabled={ply === total}
-          aria-label="다음 수"
+          aria-label={t.nextMove}
         >
           →
         </button>
@@ -86,7 +88,7 @@ export function OpeningCard({ opening, perspective, revealed, onPick, counts, ou
           onClick={onPick}
           disabled={revealed}
         >
-          이 오프닝 선택
+          {t.pickThis}
         </button>
       )}
     </div>
