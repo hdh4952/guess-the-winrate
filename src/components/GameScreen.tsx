@@ -8,6 +8,7 @@ import { ScoreBar } from "./ScoreBar";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { OpeningCarousel } from "./OpeningCarousel";
 import { ResultComparePanel } from "./ResultComparePanel";
+import { InstallButton } from "./InstallButton";
 import { useT } from "../i18n/useT";
 
 interface Props {
@@ -72,6 +73,7 @@ export function GameScreen({ openings, ratingBucket, streak, best, onAnswer, onH
     );
 
   const correctIndex = isCorrect(0, round.countsA, round.countsB, round.perspective) ? 0 : 1;
+  const wasWrong = status === "revealed" && choice !== correctIndex;
   const outcomeFor = (i: 0 | 1): "correct" | "wrong" | undefined => {
     if (status !== "revealed") return undefined;
     if (i === correctIndex) return "correct";
@@ -134,6 +136,7 @@ export function GameScreen({ openings, ratingBucket, streak, best, onAnswer, onH
           ) : null}
         </>
       )}
+      {wasWrong && <InstallButton />}
     </div>
   );
 }
