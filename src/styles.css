@@ -298,3 +298,18 @@ body {
 .install-modal button:hover {
   background: #3a5a43;
 }
+.install-button {
+  display: block;
+  margin: 0.75rem auto 0;
+  padding: 0.6rem 1.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid #4a6;
+  background: transparent;
+  color: #5b7;
+}
+.install-button:hover {
+  background: #2f4636;
+  color: #9dc;
+}
