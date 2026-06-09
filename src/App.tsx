@@ -5,11 +5,14 @@ import { RatingPicker } from "./components/RatingPicker";
 import { GameScreen } from "./components/GameScreen";
 import "./styles.css";
 import { LanguageToggle } from "./components/LanguageToggle";
+import { UpdateToast } from "./components/UpdateToast";
+import { useServiceWorkerUpdate } from "./pwa/useServiceWorkerUpdate";
 
 const openings = openingsData as unknown as OpeningEntry[];
 const BEST_KEY = "gtw-best-streak";
 
 export default function App() {
+  const { needRefresh, refresh } = useServiceWorkerUpdate();
   const [bucket, setBucket] = useState<number | null>(null);
   const [streak, setStreak] = useState(0);
   const [best, setBest] = useState<number>(() => {
@@ -51,6 +54,7 @@ export default function App() {
           onHome={handleHome}
         />
       )}
+      <UpdateToast visible={needRefresh} onRefresh={refresh} />
     </main>
   );
 }

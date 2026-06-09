@@ -1,7 +1,11 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render } from "@testing-library/react";
 import App from "./App";
 import { LanguageProvider } from "./i18n/LanguageContext";
+
+vi.mock("./pwa/useServiceWorkerUpdate", () => ({
+  useServiceWorkerUpdate: () => ({ needRefresh: false, refresh: vi.fn() }),
+}));
 
 describe("App", () => {
   it("renders the title and the rating picker on first load", () => {
