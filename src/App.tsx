@@ -4,6 +4,7 @@ import type { OpeningEntry } from "./types";
 import { RatingPicker } from "./components/RatingPicker";
 import { GameScreen } from "./components/GameScreen";
 import "./styles.css";
+import { LanguageToggle } from "./components/LanguageToggle";
 
 const openings = openingsData as unknown as OpeningEntry[];
 const BEST_KEY = "gtw-best-streak";
@@ -36,6 +37,7 @@ export default function App() {
 
   return (
     <main className="app">
+      <LanguageToggle />
       <h1 className="title">Guess the Winrate</h1>
       {bucket === null ? (
         <RatingPicker onSelect={setBucket} />
