@@ -204,8 +204,9 @@ body {
 
 .lang-toggle {
   position: fixed;
-  top: 8px;
-  right: 8px;
+  /* Keep clear of the iOS notch / status bar; env() resolves to 0 elsewhere. */
+  top: max(8px, env(safe-area-inset-top));
+  right: max(8px, env(safe-area-inset-right));
   display: flex;
   gap: 2px;
   z-index: 100;
