@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { totalGames, winRate, higherWinRateIndex, isCorrect } from "./winrate";
+import { totalGames, winRate, winRateGap, higherWinRateIndex, isCorrect } from "./winrate";
 import type { Counts } from "../types";
 
 const a: Counts = { white: 60, draws: 20, black: 20 }; // 100 games
@@ -17,6 +17,12 @@ describe("winrate helpers", () => {
 
   it("winRate returns 0 for an empty position", () => {
     expect(winRate({ white: 0, draws: 0, black: 0 }, "white")).toBe(0);
+  });
+
+  it("winRateGap returns the absolute win-rate difference per perspective", () => {
+    expect(winRateGap(a, b, "white")).toBeCloseTo(0.2); // 0.6 vs 0.4
+    expect(winRateGap(a, b, "black")).toBeCloseTo(0.2); // 0.2 vs 0.4
+    expect(winRateGap(a, a, "white")).toBe(0);
   });
 
   it("higherWinRateIndex picks the larger side per perspective", () => {

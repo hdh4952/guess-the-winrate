@@ -10,6 +10,11 @@ export function winRate(c: Counts, p: Perspective): number {
   return (p === "white" ? c.white : c.black) / total;
 }
 
+/** Absolute difference between the two win rates, for the given perspective. */
+export function winRateGap(a: Counts, b: Counts, p: Perspective): number {
+  return Math.abs(winRate(a, p) - winRate(b, p));
+}
+
 /** Index (0 or 1) of the counts with the higher win rate, or null if tied. */
 export function higherWinRateIndex(
   a: Counts,
