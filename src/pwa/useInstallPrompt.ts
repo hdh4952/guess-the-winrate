@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import {
   isIOSDevice,
   isStandaloneDisplay,
@@ -11,39 +11,60 @@ interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
 }
 
+// beforeinstallprompt is a one-shot event that fires shortly after page load —
+// before the install button (which lives on the result screen) ever mounts. So
+// capture it at module load and expose it through an external store, rather than
+// in a component effect that would register too late and miss it.
+let deferredPrompt: BeforeInstallPromptEvent | null = null;
+const listeners = new Set<() => void>();
+
+function emit() {
+  listeners.forEach((l) => l());
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener("beforeinstallprompt", (e) => {
+    // Suppress Chrome's default mini-infobar; we trigger the prompt from our button.
+    e.preventDefault();
+    deferredPrompt = e as BeforeInstallPromptEvent;
+    emit();
+  });
+  window.addEventListener("appinstalled", () => {
+    deferredPrompt = null;
+    emit();
+  });
+}
+
+function subscribe(callback: () => void) {
+  listeners.add(callback);
+  return () => {
+    listeners.delete(callback);
+  };
+}
+
+function getSnapshot(): BeforeInstallPromptEvent | null {
+  return deferredPrompt;
+}
+
 export interface InstallPrompt {
   mode: InstallMode;
   promptInstall: () => void;
 }
 
 export function useInstallPrompt(): InstallPrompt {
-  const [promptEvent, setPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
-
-  useEffect(() => {
-    const onBeforeInstall = (e: Event) => {
-      // Stop Chrome's default mini-infobar; we trigger the prompt from our button.
-      e.preventDefault();
-      setPromptEvent(e as BeforeInstallPromptEvent);
-    };
-    const onInstalled = () => setPromptEvent(null);
-    window.addEventListener("beforeinstallprompt", onBeforeInstall);
-    window.addEventListener("appinstalled", onInstalled);
-    return () => {
-      window.removeEventListener("beforeinstallprompt", onBeforeInstall);
-      window.removeEventListener("appinstalled", onInstalled);
-    };
-  }, []);
+  const prompt = useSyncExternalStore(subscribe, getSnapshot, () => null);
 
   const mode = resolveInstallMode({
     isStandalone: isStandaloneDisplay(),
     isIOS: isIOSDevice(),
-    hasPrompt: promptEvent !== null,
+    hasPrompt: prompt !== null,
   });
 
   const promptInstall = () => {
-    if (promptEvent) {
-      promptEvent.prompt();
-      setPromptEvent(null);
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt = null;
+      emit();
     }
   };
 
