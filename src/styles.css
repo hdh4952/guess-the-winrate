@@ -66,6 +66,13 @@ body {
 .opening-name { margin: 0.5rem 0 0.25rem; font-size: 1rem; }
 .opening-moves { margin: 0; font-size: 0.85rem; color: #bbb; }
 
+/* Desktop: cards stretch to equal height in the grid; lay each out as a column
+   and push the bottom element down so the pick button / result bars sit at the
+   same height across both cards even when an opening name wraps to 2+ lines. */
+.cards .opening-card { display: flex; flex-direction: column; }
+.cards .opening-card .pick-button,
+.cards .opening-card .result-bars { margin-top: auto; }
+
 .board-controls {
   display: flex;
   align-items: center;
